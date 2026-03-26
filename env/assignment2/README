@@ -1,0 +1,63 @@
+# Assignment 2: System Patch Management
+
+## Objective
+Automate patch management using Azure Automation and reusable modules.
+
+## Project Structure
+```
+modules/
+  automation_account/    # Azure Automation Account module
+  log_analytics/         # Log Analytics Workspace module
+  update_management/     # Update Management configuration module
+main.tf                  # Root configuration
+variables.tf             # Input variables
+terraform.tfvars         # Variable values
+output.tf                # Outputs
+provider.tf              # Azure provider
+README.md                # This documentation
+```
+
+## Modules Overview
+
+### log_analytics
+Creates a Log Analytics Workspace for collecting logs and monitoring update compliance.
+- Inputs: name, location, resource_group_name
+- Outputs: workspace_id
+
+### automation_account
+Creates an Azure Automation Account and links it to the Log Analytics Workspace.
+- Inputs: name, location, resource_group_name, log_analytics_workspace_id
+- Outputs: automation_account_id
+
+### update_management
+Configures Update Management to register VMs for patching and schedule weekly deployments.
+- Inputs: automation_account_id, vm_ids, time_zone, schedule_start_time
+- Outputs: update_configuration_name
+
+## Usage Instructions
+
+1. Update `terraform.tfvars` with your values:
+   - env: Environment name
+   - schedule_start_time: Start time for weekly patches (e.g., "2026-01-01T02:00:00Z")
+
+2. Initialize Terraform:
+   ```
+   terraform init
+   ```
+
+3. Plan and apply:
+   ```
+   terraform plan
+   terraform apply
+   ```
+
+## Monitoring Patch Compliance
+
+- Use Azure Portal: Go to Automation Account > Update Management > View compliance status
+- Query logs in Log Analytics Workspace for patch deployment results
+- Check outputs for configuration details
+
+## Notes
+- This configuration assumes the VM is deployed via Assignment 1 in the same resource group.
+- The VM name is constructed as "vm-${env}" (e.g., "vm-dev").
+- Ensure VMs are in the same subscription as the Automation Account.

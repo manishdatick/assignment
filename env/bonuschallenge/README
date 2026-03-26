@@ -1,0 +1,94 @@
+# Bonus Challenge: Full Environment
+
+Objective: compose networking, VM deployment, and patch management into one parameterized Azure environment using reusable Terraform modules.
+
+## Project Structure
+```
+modules/
+  vnet/                # Virtual Network + Subnet module
+  nsg/                 # Network Security Group module
+  vm/                  # Linux VM with NGINX + public IP
+  log_analytics/       # Log Analytics Workspace module
+  automation_account/  # Automation Account module
+  update_management/   # Update Management module
+main.tf                # Root configuration to call modules
+variables.tf           # Input variables
+terraform.tfvars       # Variable values
+output.tf              # Output public IPs and VM IDs
+README                 # This documentation
+provider.tf            # Azure provider configuration
+```
+
+## Modules Overview
+
+### vnet/
+Creates a virtual network and one or more subnets.
+
+### nsg/
+Creates a Network Security Group. Inbound ports such as 22 (SSH) and 80 (HTTP) are controlled through `nsg_security_rules` in `terraform.tfvars`.
+
+### vm/
+Deploys one or more Linux VMs using `for_each`, installs NGINX using cloud-init, and associates the NSG.
+
+### log_analytics/
+Creates a Log Analytics Workspace to collect logs and monitor update compliance.
+
+### automation_account/
+Creates an Azure Automation Account and links it to the Log Analytics Workspace.
+
+### update_management/
+Registers the deployed VMs for patching and schedules a weekly patch deployment.
+
+## Architecture Diagram
+
+```
+Internet
+    |
+    v
+[ NSG ] -- inbound 22, 80
+    |
+    v
+[ Linux VM(s) with NGINX ] <-- Update Management (weekly patches)
+    |
+    v
+[ VNET + Subnet(s) ]
+
+[ Automation Account ] --> [ Update Management ] --> [ VM(s) ]
+[ Log Analytics Workspace ]
+```
+
+## Usage Guide
+
+1. Configure `terraform.tfvars`:
+   - set `location`, `tags`, and `schedule_start_time`
+   - define `nsg_security_rules` for ports 22 and 80
+   - define one or more VMs in the `vms` map
+
+2. Initialize and deploy:
+   ```
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+
+3. Access the web server using the output public IP on port 80.
+
+    
+
+4. Monitor patches via Azure Portal > Automation Account > Update Management.
+
+## Running Independently
+
+The Bonus Challenge is a **self-contained, standalone deployment**. It does NOT depend on Assignment 1 or Assignment 2 being deployed first. It creates its own resource group, networking, VMs, and patch management from scratch using the same shared modules.
+
+To run it independently:
+```
+cd env/bonuschallenge
+terraform init
+terraform plan
+terraform apply
+```
+
+No prior state from other assignments is needed.
+
+
