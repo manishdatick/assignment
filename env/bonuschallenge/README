@@ -91,4 +91,11 @@ terraform apply
 
 No prior state from other assignments is needed.
 
+## Important: Deprecation Notice
+> **Azure Automation Update Management was deprecated on 31st August 2024 and has been shut down on 28th February 2025.**
+> Microsoft recommends migrating to **Azure Update Manager**.
+> Learn more: https://aka.ms/mmaagentbasedservicesshutdown
+>
+> This configuration uses `azurerm_automation_software_update_configuration` for demonstration purposes. In production, use Azure Update Manager (`azurerm_maintenance_configuration`) instead.
+
 

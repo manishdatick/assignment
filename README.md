@@ -104,6 +104,13 @@ terraform destroy
 
 **Note**: Destroy in reverse order (Assignment 2 first, then 1, then Bonus Challenge) to avoid dependency issues.
 
+## Important: Deprecation Notice
+> **Azure Automation Update Management was deprecated on 31st August 2024 and has been shut down on 28th February 2025.**
+> Microsoft recommends migrating to **Azure Update Manager**.
+> Learn more: https://aka.ms/mmaagentbasedservicesshutdown
+>
+> Assignment 2 and the Bonus Challenge use `azurerm_automation_software_update_configuration` for demonstration purposes. In production, use Azure Update Manager (`azurerm_maintenance_configuration`) instead.
+
 ## Contributing
 
 This is an assignment project. For improvements, ensure changes maintain modularity and follow Terraform best practices.

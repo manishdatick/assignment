@@ -57,6 +57,13 @@ Configures Update Management to register VMs for patching and schedule weekly de
 - Query logs in Log Analytics Workspace for patch deployment results
 - Check outputs for configuration details
 
+## Important: Deprecation Notice
+> **Azure Automation Update Management was deprecated on 31st August 2024 and has been shut down on 28th February 2025.**
+> Microsoft recommends migrating to **Azure Update Manager**.
+> Learn more: https://aka.ms/mmaagentbasedservicesshutdown
+>
+> This assignment uses `azurerm_automation_software_update_configuration` for demonstration purposes. In production, use Azure Update Manager (`azurerm_maintenance_configuration`) instead.
+
 ## Notes
 - This configuration assumes the VM is deployed via Assignment 1 in the same resource group.
 - The VM name is constructed as "vm-${env}" (e.g., "vm-dev").
